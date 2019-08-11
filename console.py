@@ -48,6 +48,7 @@ class HBNBCommand(cmd.Cmd):
         """
         parser = shlex(line, posix=True)
         parser.quotes = '"'
+        parser.whitespace_split = True
         className = parser.get_token()
         if className is None:
             print("** class name missing **")
@@ -62,7 +63,7 @@ class HBNBCommand(cmd.Cmd):
             if token is None:
                 continue
             key, _, value = token.partition('=')
-            if len(key) < 1:
+            if len(key) < 1 or len(value) < 1:
                 continue
             if value.isdigit() or (value[0] in '+-' and value[1:].isdigit()):
                 value = int(value)
