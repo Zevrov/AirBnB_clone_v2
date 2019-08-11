@@ -84,10 +84,10 @@ class BaseModel:
         Return:
             returns a dictionary of all the key values in __dict__
         """
-        my_dict = dict(self.__dict__)
-        my_dict["__class__"] = self.__class__.__name__
-        my_dict["created_at"] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        my_dict["updated_at"] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        if "_sa_instance_state" in my_dict:
-            del my_dict["_sa_instance_state"]
-        return my_dict
+        mdict = dict(self.__dict__)
+        mdict["__class__"] = self.__class__.__name__
+        mdict["created_at"] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        mdict["updated_at"] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        if "_sa_instance_state" in mdict:
+            del mdict["_sa_instance_state"]
+        return mdict
