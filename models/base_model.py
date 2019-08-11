@@ -4,11 +4,17 @@ import uuid
 import models
 from datetime import datetime
 
+Base = declaritivebase()
+
 
 class BaseModel:
     """This class will defines all common attributes/methods
     for other classes
     """
+
+    id = Column(String(60), nullable=False, primary_key=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """Instantiation of base model class
@@ -29,7 +35,7 @@ class BaseModel:
         else:
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()
-            models.storage.new(self)
+            #models.storage.new(self)
 
     def __str__(self):
         """returns a string
@@ -48,7 +54,12 @@ class BaseModel:
         """updates the public instance attribute updated_at to current
         """
         self.updated_at = datetime.now()
+        models.storage.new(self)
         models.storage.save()
+
+    def delete(self):
+        """delete current instance from storage """
+        models.storage.delete(self)
 
     def to_dict(self):
         """creates dictionary of the class  and returns
