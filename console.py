@@ -46,7 +46,6 @@ class HBNBCommand(cmd.Cmd):
             SyntaxError: when there is no args given
             NameError: when there is no object taht has the name
         """
-
         parser = shlex(line, posix=True)
         parser.quotes = '"'
         className = parser.get_token()
@@ -147,24 +146,16 @@ class HBNBCommand(cmd.Cmd):
         Exceptions:
             NameError: when there is no object taht has the name
         """
-        objects = storage.all()
-        my_list = []
-        if not line:
-            for key in objects:
-                my_list.append(objects[key])
-            print(my_list)
+        parser = shlex(line, posix=True)
+        parser.quotes = ''
+        className = parser.get_token()
+        if className is None:
+            print(list(storage.all().values()))
             return
-        try:
-            args = line.split(" ")
-            if args[0] not in self.classes:
-                raise NameError()
-            for key in objects:
-                name = key.split('.')
-                if name[0] == args[0]:
-                    my_list.append(objects[key])
-            print(my_list)
-        except NameError:
+        if className not in self.classes:
             print("** class doesn't exist **")
+            return
+        print(list(storage.all(self.classes[className]).values()))
 
     def do_update(self, line):
         """Updates an instanceby adding or updating attribute
