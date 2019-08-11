@@ -10,15 +10,23 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-from shlex import split
+from shlex import shlex
+from io import StringIO
 
 
 class HBNBCommand(cmd.Cmd):
     """this class is entry point of the command interpreter
     """
     prompt = "(hbnb) "
-    all_classes = {"BaseModel", "User", "State", "City",
-                   "Amenity", "Place", "Review"}
+    classes = {
+        "BaseModel": BaseModel,
+        "User": User,
+        "State": State,
+        "City": City,
+        "Amenity": Amenity,
+        "Place": Place,
+        "Review": Review
+    }
 
     def emptyline(self):
         """Ignores empty spaces"""
@@ -38,17 +46,38 @@ class HBNBCommand(cmd.Cmd):
             SyntaxError: when there is no args given
             NameError: when there is no object taht has the name
         """
-        try:
-            if not line:
-                raise SyntaxError()
-            my_list = line.split(" ")
-            obj = eval("{}()".format(my_list[0]))
-            obj.save()
-            print("{}".format(obj.id))
-        except SyntaxError:
+
+        parser = shlex(line, posix=True)
+        parser.quotes = '"'
+        className = parser.get_token()
+        if className is None:
             print("** class name missing **")
-        except NameError:
+            return
+        if className not in self.classes:
             print("** class doesn't exist **")
+            return
+        token = ...
+        args = {}
+        while token is not None:
+            token = parser.get_token()
+            if token is None:
+                continue
+            key, _, value = token.partition('=')
+            if len(key) < 1:
+                continue
+            if value.isdigit() or (value[0] in '+-' and value[1:].isdigit()):
+                value = int(value)
+            elif value.count('.') == 1 and (
+                value.replace('.', '').isdigit() or
+                (value[0] in '+-' and value[1:].replace('.', '').isdigit())
+            ):
+                value = float(value)
+            else:
+                value = value.replace('_', ' ')
+            args[key] = value
+        obj = self.classes[className](**args)
+        obj.save()
+        print("{}".format(obj.id))
 
     def do_show(self, line):
         """Prints the string representation of an instance
@@ -62,7 +91,7 @@ class HBNBCommand(cmd.Cmd):
             if not line:
                 raise SyntaxError()
             my_list = line.split(" ")
-            if my_list[0] not in self.all_classes:
+            if my_list[0] not in self.classes:
                 raise NameError()
             if len(my_list) < 2:
                 raise IndexError()
@@ -93,7 +122,7 @@ class HBNBCommand(cmd.Cmd):
             if not line:
                 raise SyntaxError()
             my_list = line.split(" ")
-            if my_list[0] not in self.all_classes:
+            if my_list[0] not in self.classes:
                 raise NameError()
             if len(my_list) < 2:
                 raise IndexError()
@@ -127,7 +156,7 @@ class HBNBCommand(cmd.Cmd):
             return
         try:
             args = line.split(" ")
-            if args[0] not in self.all_classes:
+            if args[0] not in self.classes:
                 raise NameError()
             for key in objects:
                 name = key.split('.')
@@ -150,8 +179,8 @@ class HBNBCommand(cmd.Cmd):
         try:
             if not line:
                 raise SyntaxError()
-            my_list = split(line, " ")
-            if my_list[0] not in self.all_classes:
+            my_list = str.split(line, " ")
+            if my_list[0] not in self.classes:
                 raise NameError()
             if len(my_list) < 2:
                 raise IndexError()
@@ -187,8 +216,8 @@ class HBNBCommand(cmd.Cmd):
         """
         counter = 0
         try:
-            my_list = split(line, " ")
-            if my_list[0] not in self.all_classes:
+            my_list = str.split(line, " ")
+            if my_list[0] not in self.classes:
                 raise NameError()
             objects = storage.all()
             for key in objects:
