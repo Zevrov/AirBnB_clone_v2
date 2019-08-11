@@ -1,15 +1,8 @@
 #!/usr/bin/python3
 """This is the console for AirBnB"""
 import cmd
-from models import storage
+import models
 from datetime import datetime
-from models.base_model import BaseModel
-from models.user import User
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.place import Place
-from models.review import Review
 from shlex import shlex
 from io import StringIO
 
@@ -18,15 +11,6 @@ class HBNBCommand(cmd.Cmd):
     """this class is entry point of the command interpreter
     """
     prompt = "(hbnb) "
-    classes = {
-        "BaseModel": BaseModel,
-        "User": User,
-        "State": State,
-        "City": City,
-        "Amenity": Amenity,
-        "Place": Place,
-        "Review": Review
-    }
 
     def emptyline(self):
         """Ignores empty spaces"""
@@ -53,7 +37,7 @@ class HBNBCommand(cmd.Cmd):
         if className is None:
             print("** class name missing **")
             return
-        if className not in self.classes:
+        if className not in models.classes:
             print("** class doesn't exist **")
             return
         token = ...
@@ -75,7 +59,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 value = value.replace('_', ' ')
             args[key] = value
-        obj = self.classes[className](**args)
+        obj = models.classes[className](**args)
         obj.save()
         print("{}".format(obj.id))
 
@@ -91,11 +75,11 @@ class HBNBCommand(cmd.Cmd):
             if not line:
                 raise SyntaxError()
             my_list = line.split(" ")
-            if my_list[0] not in self.classes:
+            if my_list[0] not in models.classes:
                 raise NameError()
             if len(my_list) < 2:
                 raise IndexError()
-            objects = storage.all()
+            objects = models.storage.all()
             key = my_list[0] + '.' + my_list[1]
             if key in objects:
                 print(objects[key])
@@ -122,15 +106,15 @@ class HBNBCommand(cmd.Cmd):
             if not line:
                 raise SyntaxError()
             my_list = line.split(" ")
-            if my_list[0] not in self.classes:
+            if my_list[0] not in models.classes:
                 raise NameError()
             if len(my_list) < 2:
                 raise IndexError()
-            objects = storage.all()
+            objects = models.storage.all()
             key = my_list[0] + '.' + my_list[1]
             if key in objects:
                 del objects[key]
-                storage.save()
+                models.storage.save()
             else:
                 raise KeyError()
         except SyntaxError:
@@ -151,12 +135,12 @@ class HBNBCommand(cmd.Cmd):
         parser.quotes = ''
         className = parser.get_token()
         if className is None:
-            print(list(storage.all().values()))
+            print(list(models.storage.all().values()))
             return
-        if className not in self.classes:
+        if className not in models.classes:
             print("** class doesn't exist **")
             return
-        print(list(storage.all(self.classes[className]).values()))
+        print(list(models.storage.all(models.classes[className]).values()))
 
     def do_update(self, line):
         """Updates an instanceby adding or updating attribute
@@ -172,11 +156,11 @@ class HBNBCommand(cmd.Cmd):
             if not line:
                 raise SyntaxError()
             my_list = str.split(line, " ")
-            if my_list[0] not in self.classes:
+            if my_list[0] not in models.classes:
                 raise NameError()
             if len(my_list) < 2:
                 raise IndexError()
-            objects = storage.all()
+            objects = models.storage.all()
             key = my_list[0] + '.' + my_list[1]
             if key not in objects:
                 raise KeyError()
@@ -209,9 +193,9 @@ class HBNBCommand(cmd.Cmd):
         counter = 0
         try:
             my_list = str.split(line, " ")
-            if my_list[0] not in self.classes:
+            if my_list[0] not in models.classes:
                 raise NameError()
-            objects = storage.all()
+            objects = models.storage.all()
             for key in objects:
                 name = key.split('.')
                 if name[0] == my_list[0]:
@@ -260,7 +244,7 @@ class HBNBCommand(cmd.Cmd):
             elif my_list[1][:6] == "update":
                 args = self.strip_clean(my_list)
                 if isinstance(args, list):
-                    obj = storage.all()
+                    obj = models.storage.all()
                     key = args[0] + ' ' + args[1]
                     for k, v in args[2].items():
                         self.do_update(key + ' "{}" "{}"'.format(k, v))
