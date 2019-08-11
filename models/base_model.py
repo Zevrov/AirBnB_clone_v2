@@ -51,7 +51,7 @@ class BaseModel:
             self.updated_at = datetime.now()
 
         for keys, values in kwargs.items():
-            if "__class__" not in key:
+            if "__class__" not in keys:
                 setattr(self, keys, values)
             # models.storage.new(self)
 
