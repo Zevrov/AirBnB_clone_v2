@@ -7,10 +7,7 @@ from models.place import place_amenity
 
 
 class Amenity(BaseModel):
-    """This is the class for Amenity
-    Attributes:
-        name: input name
-    """
+    """Amenity attributes"""
      __tablename__ = "amenities"
     name = Column(String(128), nullable=False)
     place_amenities = relationship("Place",
