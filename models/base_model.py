@@ -7,6 +7,7 @@ from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 
 
+kronos = "%Y-%m-%dT%H:%M:%S.%f"
 Base = declarative_base()
 
 
@@ -29,15 +30,29 @@ class BaseModel:
             created_at: creation date
             updated_at: updated date
         """
-        if kwargs:
-            for key, value in kwargs.items():
-                if key == "created_at" or key == "updated_at":
-                    value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
-                if key != "__class__":
-                    setattr(self, key, value)
-        else:
+        if (len(kwargs) == 0):
             self.id = str(uuid.uuid4())
-            self.created_at = self.updated_at = datetime.now()
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+
+        if "id" not in kwargs:
+            self.id = str(uuid.uuid4())
+
+        if "created_at" in kwargs:
+            kwargs["created_at"] = datetime.strptime(kwargs["created_at"],
+                                                     kronos)
+        else:
+            self.created_at = datetime.now()
+
+        if "updated_at" in kwargs:
+            kwargs["updated_at"] = datetime.strptime(kwargs["updated_at"],
+                                                     kronos)
+        else:
+            self.updated_at = datetime.now()
+
+        for keys, values in kwargs.items():
+            if "__class__" not in key:
+                setattr(self, keys, values)
             # models.storage.new(self)
 
     def __str__(self):
@@ -70,7 +85,9 @@ class BaseModel:
             returns a dictionary of all the key values in __dict__
         """
         my_dict = dict(self.__dict__)
-        my_dict["__class__"] = str(type(self).__name__)
-        my_dict["created_at"] = self.created_at.isoformat()
-        my_dict["updated_at"] = self.updated_at.isoformat()
+        my_dict["__class__"] = self.__class__.__name__
+        my_dict["created_at"] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        my_dict["updated_at"] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        if "_sa_instance_state" in my_dict:
+            del my_dict["_sa_instance_state"]
         return my_dict
