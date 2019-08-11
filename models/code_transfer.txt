@@ -1,0 +1,173 @@
+User.py
+#!/usr/bin/python3
+"""This is the user class"""
+from models.base_model import BaseModel, Base
+from sqlalchemy import Column, String
+import os
+
+
+class User(BaseModel):
+    """This is the class for user
+    Attributes:
+        email: email address
+        password: password for you login
+        first_name: first name
+        last_name: last name
+    """
+    __tablename__ = "users"
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        email = Column(String(128), nullable=False)
+        password = Column(String(128), nullable=False)
+        first_name = Column(String(128), nullable=False)
+        last_name = Column(String(128), nullable=False)
+    else:
+        email = ""
+        password = ""
+        first_name = ""
+        last_name = ""
+
+state.py
+#!/usr/bin/python3
+"""This is the state class"""
+from models.base_model import BaseModel, Base
+from sqlalchemy import Column, String, Integer
+from sqlalchemy.orm import relationship
+from models.city import City
+import os
+import models
+
+
+class State(BaseModel):
+    """This is the class for State
+    Attributes:
+        name: input name
+    """
+    __tablename__ = "states"
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        name = Column(String(128), nullable=False)
+        cities = relationship("City", passive_deletes=True, backref="state")
+    else:
+        name = ""
+
+        @property
+        def cities(self):
+            """Return all the cities"""
+            city_list = [i for i in models.storage.all(City).values()
+                         if i.state_id == self.id]
+            return city_list
+
+City.py
+#!/usr/bin/python3
+"""This is the city class"""
+from models.base_model import BaseModel, Base
+from sqlalchemy import Column, Integer, String, ForeignKey
+import os
+
+
+class City(BaseModel):
+    """This is the class for City
+    Attributes:
+        state_id: The state id
+        name: input name
+    """
+    __tablename__ = 'cities'
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        name = Column(String(128), nullable=False)
+        state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
+    else:
+        state_id = ""
+        name = ""
+
+base_model.py
+#!/usr/bin/python3
+"""This is the base model class for AirBnB"""
+import uuid
+import models
+from datetime import datetime
+
+Base = declaritivebase()
+
+
+class BaseModel:
+    """This class will defines all common attributes/methods
+    for other classes
+    """
+
+    id = Column(String(60), nullable=False, primary_key=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+
+    def __init__(self, *args, **kwargs):
+        """Instantiation of base model class
+        Args:
+            args: it won't be used
+            kwargs: arguments for the constructor of the BaseModel
+        Attributes:
+            id: unique id generated
+            created_at: creation date
+            updated_at: updated date
+        """
+        if kwargs:
+            for key, value in kwargs.items():
+                if key == "created_at" or key == "updated_at":
+                    value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                if key != "__class__":
+                    setattr(self, key, value)
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = self.updated_at = datetime.now()
+            #models.storage.new(self)
+
+    def __str__(self):
+        """returns a string
+        Return:
+            returns a string of class name, id, and dictionary
+        """
+        return "[{}] ({}) {}".format(
+            type(self).__name__, self.id, self.__dict__)
+
+    def __repr__(self):
+        """return a string representaion
+        """
+        return self.__str__()
+
+    def save(self):
+        """updates the public instance attribute updated_at to current
+        """
+        self.updated_at = datetime.now()
+        models.storage.new(self)
+        models.storage.save()
+
+    def delete(self):
+        """delete current instance from storage """
+        models.storage.delete(self)
+
+    def to_dict(self):
+        """creates dictionary of the class  and returns
+        Return:
+            returns a dictionary of all the key values in __dict__
+        """
+        my_dict = dict(self.__dict__)
+        my_dict["__class__"] = str(type(self).__name__)
+        my_dict["created_at"] = self.created_at.isoformat()
+        my_dict["updated_at"] = self.updated_at.isoformat()
+        return my_dict
+
+__init__.py
+#!/usr/bin/python3
+"""create a unique FileStorage instance for your application"""
+from models.engine.file_storage import FileStorage
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+from os import getenv
+
+if getenv("HBNB_TYPE_STORAGE") == "db":
+    storage = DBStorage()
+else:
+    storage = FileStorage()
+storage.reload()
