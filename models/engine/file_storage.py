@@ -45,6 +45,18 @@ class FileStorage:
         with open(self.__file_path, 'w', encoding="UTF-8") as f:
             json.dump(my_dict, f)
 
+    def delete(self, obj=None):
+        """delete an object from storage if it exists
+
+        Args:
+            obj (BaseModel): object to delete
+        """
+        if obj is None:
+            return
+        key = type(obj).__name__ + '.' + obj.id
+        if key in self.__objects:
+            del self.__objects[key]
+
     def reload(self):
         """serialize the file path to JSON file path
         """
