@@ -9,36 +9,10 @@ from models.place import place_amenity
 class Amenity(BaseModel, Base):
     """Amenity attributes"""
     __tablename__ = "amenities"
-    name = Column(String(128), nullable=False)
-    places = relationship("Place",
-                                   secondary='place_amenity',
-                                   back_populates="amenities")
-
-    @property
-    def reviews(self):
-        """Review Getter"""
-        r_dic = models.storage.all('Review')
-        r_list = []
-        for index in reviews_dict.values():
-            if index.place_id == self.id:
-                r_list.append(index)
-
-            return i
-
-    @property
-    def amenities(self):
-        """Getter for amenities"""
-        object_list = []
-        objs = models.storage.all('Amenity')
-        for index in objs.values():
-            if index.id in amenity_id:
-                object_list.append(index)
-
-            return object_list
-
-    @amenities.setter
-    def amenities(self, obj):
-        """ameneties setter"""
-        if isinstance(obj, Amenity):
-            if self.id == obj.place_id:
-                self.amenity_ids.append(obj.id)
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        name = Column(String(128), nullable=False)
+        places = relationship("Place",
+                              secondary='place_amenity',
+                              back_populates="amenities")
+    else:
+        name = ""
