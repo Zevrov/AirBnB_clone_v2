@@ -5,6 +5,7 @@ from datetime import datetime
 import models
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 
 kronos = "%Y-%m-%dT%H:%M:%S.%f"

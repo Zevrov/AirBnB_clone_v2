@@ -10,8 +10,9 @@ class Amenity(BaseModel):
     """Amenity attributes"""
     __tablename__ = "amenities"
     name = Column(String(128), nullable=False)
-    place_amenities = relationship("Place",
-                                   secondary=place_amenity)
+    places = relationship("Place",
+                                   secondary='place_amenity',
+                                   back_populates="amenities")
 
     @property
     def reviews(self):
