@@ -9,10 +9,7 @@ import models
 
 
 class State(BaseModel):
-    """This is the class for State
-    Attributes:
-        name: input name
-    """
+    """This is the class for State"""
     __tablename__ = "states"
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         name = Column(String(128), nullable=False)

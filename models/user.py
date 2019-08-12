@@ -7,13 +7,7 @@ import os
 
 
 class User(BaseModel):
-    """This is the class for user
-    Attributes:
-        email: email address
-        password: password for you login
-        first_name: first name
-        last_name: last name
-    """
+    """This is the class for user"""
     __tablename__ = "users"
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         email = Column(String(128), nullable=False)

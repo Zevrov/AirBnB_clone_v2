@@ -7,11 +7,7 @@ import os
 
 
 class City(BaseModel):
-    """This is the class for City
-    Attributes:
-        state_id: The state id
-        name: input name
-    """
+    """This is the class for City"""
     __tablename__ = 'cities'
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         name = Column(String(128), nullable=False)
