@@ -8,7 +8,7 @@ import os
 import models
 
 
-class State(BaseModel):
+class State(BaseModel, Base):
     """This is the class for State"""
     __tablename__ = "states"
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':

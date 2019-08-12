@@ -6,7 +6,7 @@ from sqlalchemy import Column, String
 import os
 
 
-class User(BaseModel):
+class User(BaseModel, Base):
     """This is the class for user"""
     __tablename__ = "users"
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':

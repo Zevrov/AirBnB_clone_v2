@@ -24,7 +24,7 @@ place_amenity = Table(
 )
 
 
-class Place(BaseModel):
+class Place(BaseModel, Base):
     """This is the class for Place"""
     __tablename__ = "places"
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':

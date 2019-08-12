@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 import os
 
 
-class Review(BaseModel):
+class Review(BaseModel, Base):
     """This is the class for Review"""
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         text = Column(String(1024), nullable=False)

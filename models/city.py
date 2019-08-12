@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 import os
 
 
-class City(BaseModel):
+class City(BaseModel, Base):
     """This is the class for City"""
     __tablename__ = 'cities'
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
