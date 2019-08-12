@@ -41,7 +41,7 @@ class Place(BaseModel, Base):
         reviews = relationship("Review", back_populates="place")
         amenities = relationship(
             "Amenity", secondary='place_amenity',
-            back_populates="places", viewonly=False)
+            back_populates="place_amenities", viewonly=False)
         city = relationship("City", back_populates="places")
         user = relationship("User", back_populates="places")
     else:
