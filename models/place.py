@@ -36,8 +36,8 @@ class Place(BaseModel):
     """
     __tablename__ = "places"
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        city_id = Column(String(60), nullable=False)
-        user_id = Column(String(60), nullable=False)
+        city_id = Column(String(60), nullable=False, ForeignKey('cities.id'))
+        user_id = Column(String(60), nullable=False, ForeignKey('users.id'))
         name = Column(String(128), nullable=False)
         description = Column(String(1024), nullable=False)
         number_rooms = Column(Integer, nullable=False, default=0)
