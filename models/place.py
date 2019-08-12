@@ -59,12 +59,12 @@ class Place(BaseModel, Base):
 
         @property
         def reviews(self):
-        """Review Getter"""
-        r_dic = models.storage.all('Review')
-        r_list = []
-        for index in reviews_dict.values():
-            if index.place_id == self.id:
-                r_list.append(index)
+            """Review Getter"""
+            r_dic = models.storage.all('Review')
+            r_list = []
+            for index in reviews_dict.values():
+                if index.place_id == self.id:
+                    r_list.append(index)
 
             return i
 
@@ -72,12 +72,12 @@ class Place(BaseModel, Base):
         def amenities(self):
             """Getter for amenities"""
             object_list = []
-           objs = models.storage.all('Amenity')
+            objs = models.storage.all('Amenity')
             for index in objs.values():
                 if index.id in amenity_id:
                     object_list.append(index)
 
-                return object_list
+            return object_list
 
         @amenities.setter
         def amenities(self, obj):
