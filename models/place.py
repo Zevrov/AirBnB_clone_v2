@@ -22,6 +22,7 @@ place_amenity = Table(
            primary_key=True,
            nullable=False)
 )
+"""association table for places and amenities"""
 
 
 class Place(BaseModel, Base):
@@ -65,7 +66,6 @@ class Place(BaseModel, Base):
             for index in reviews_dict.values():
                 if index.place_id == self.id:
                     r_list.append(index)
-
             return i
 
         @property
@@ -76,7 +76,6 @@ class Place(BaseModel, Base):
             for index in objs.values():
                 if index.id in amenity_id:
                     object_list.append(index)
-
             return object_list
 
         @amenities.setter
