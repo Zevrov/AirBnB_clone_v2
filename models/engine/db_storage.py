@@ -61,7 +61,7 @@ class DBStorage:
 
     def delete(self, obj=None):
         """Delete obj from the database
-        
+
         Args:
             obj (BaseModel): object to remove from the database
 
