@@ -4,6 +4,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, ForeignKey
 import os
 
+
 class Review(BaseModel):
     """This is the class for Review"""
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
