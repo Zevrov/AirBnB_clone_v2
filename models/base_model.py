@@ -41,7 +41,6 @@ class BaseModel:
         for keys, values in kwargs.items():
             if "__class__" not in keys:
                 setattr(self, keys, values)
-            # models.storage.new(self)
 
     def __str__(self):
         """returns a string
