@@ -6,7 +6,6 @@ import models
 import models.base_model
 import os
 import sqlalchemy
-import sqlalchemy.ext.declarative
 import sqlalchemy.orm
 
 
@@ -31,9 +30,7 @@ class DBStorage:
             pool_pre_ping=True
         )
         if os.getenv('HBNB_ENV', '') == 'test':
-            sqlalchemy.ext.declarative.declarative_base().metadata.delete_all(
-                self.__engine
-            )
+            models.base_model.Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """Return a collection of objects, optionally filtered by class
@@ -83,13 +80,12 @@ class DBStorage:
         """Open a new MySQL session and create tables if necessary"""
 
         models.base_model.Base.metadata.create_all(self.__engine)
-        if self.__sessionMaker is None:
-            self.__sessionMaker = sqlalchemy.orm.scoped_session(
+        if DBStorage.__sessionMaker is None:
+            DBStorage.__sessionMaker = sqlalchemy.orm.scoped_session(
                 sqlalchemy.orm.sessionmaker(bind=self.__engine)
             )
-        if self.__session is not None:
-            self.__session.close()
-        self.__session = self.__sessionMaker(expire_on_commit=False)
+        if self.__session is None:
+            DBStorage.__session = self.__sessionMaker(expire_on_commit=False)
 
     def save(self):
         """commit all current pending changes to the database"""
