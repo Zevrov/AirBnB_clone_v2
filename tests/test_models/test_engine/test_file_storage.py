@@ -31,6 +31,10 @@ class TestFileStorage(unittest.TestCase):
         """at the end of the test this will tear it down"""
         del cls.user
 
+    def setUp(self):
+        """skip tests if using databases"""
+        self.skipTest('using database storage, not file storage')
+
     def tearDown(self):
         """teardown"""
         try:

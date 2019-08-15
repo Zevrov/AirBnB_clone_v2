@@ -83,7 +83,7 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(
                 "** class doesn't exist **\n", f.getvalue())
         with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("create User")
+            self.consol.onecmd('create User email="test" password="pass"')
         with patch('sys.stdout', new=StringIO()) as f:
             self.consol.onecmd("all User")
             self.assertEqual(

@@ -61,6 +61,8 @@ class TestReview(unittest.TestCase):
 
     def test_save_Review(self):
         """test if the save works"""
+        if os.getenv('HBNB_TYPE_STORAGE', '') == 'db':
+            self.skipTest('Reviews have database dependencies')
         self.rev.save()
         self.assertNotEqual(self.rev.created_at, self.rev.updated_at)
 

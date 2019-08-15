@@ -54,6 +54,8 @@ class TestBaseModel(unittest.TestCase):
 
     def test_save_BaesModel(self):
         """test if the save works"""
+        if os.getenv('HBNB_TYPE_STORAGE', '') == 'db':
+            self.skipTest('no table for base model class')
         self.base.save()
         self.assertNotEqual(self.base.created_at, self.base.updated_at)
 
