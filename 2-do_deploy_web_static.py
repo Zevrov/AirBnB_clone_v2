@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """destribute an archive to a web server"""
 
-import fabric
+import fabric.api
 import os
 import os.path
 import datetime
