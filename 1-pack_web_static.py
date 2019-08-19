@@ -13,8 +13,8 @@ def do_pack():
         if os.path.isdir("versions") is False:
                 fabric.apilocal("mkdir versions")
         time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        file = "versions/web_static_{}.tgz".format(time)
-        fabric.api.local("tar -cvzf {} web_static".format(file_name))
-        return file
+        packed = "versions/web_static_{}.tgz".format(time)
+        fabric.api.local("tar -cvzf {} web_static".format(packed))
+        return packed
     except:
         return None
