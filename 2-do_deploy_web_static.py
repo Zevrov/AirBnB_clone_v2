@@ -5,7 +5,7 @@ import fabric.api
 import os
 import os.path
 import datetime
-fabric.api.env.hosts = ['34.73.58.99', '35.231.152.200']
+fabric.api.env.hosts = ['34.73.58.99', '34.74.6.218']
 
 
 def do_deploy(archive_path):
@@ -16,6 +16,7 @@ def do_deploy(archive_path):
     try:
         file_name = os.path.splitext(os.path.split(archive_path)[1])[0]
         target = '/data/web_static/releases/' + file_name
+        fabric.api.run('sudo su -')
         path = fabric.api.put(archive_path, '/tmp/' + file_name)
         path = path[0]
         fabric.api.run('mkdir -p ' + target)
