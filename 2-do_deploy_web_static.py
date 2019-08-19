@@ -14,18 +14,16 @@ def do_deploy(archive_path):
         return False
 
     try:
-        file_name = os.path.splitext(os.path.split(archive_path)[1])[0]
-        target = '/data/web_static/releases/' + file_name
-        fabric.api.run('sudo su -')
-        path = fabric.api.put(archive_path, '/tmp/' + file_name)
-        path = path[0]
-        fabric.api.run('mkdir -p ' + target)
-        fabric.api.run('tar -xzf ' + path + ' -C ' + target)
-        fabric.api.run('rm ' + path)
-        fabric.api.run('mv ' + target + '/web_static/* ' + target + '/')
-        fabric.api.run('rm -rf ' + target + '/web_static')
-        fabric.api.run('rm -rf /data/web_static/current')
-        fabric.api.run('ln -s ' + target + '/ /data/web_static/current')
+        path = archive_path.split('/')[1]
+        target = '/data/web_static/releases/' + path
+        fabric.api.put(archive_path, "/tmp/")
+        fabric.api.run('sudo mkdir -p ' + target + '/')
+        fabric.api.run('sudo tar -xzf /tmp/' + path + ' -C ' + target + '/')
+        fabric.api.run('sudo rm /tmp/' + path)
+        fabric.api.run('sudo mv ' + target + '/web_static/* ' + target + '/')
+        fabric.api.run('sudo rm -rf ' + target + '/web_static')
+        fabric.api.run('sudo rm -rf /data/web_static/current')
+        fabric.api.run('sudo ln -s ' + target + '/data/web_static/current')
         print('deploy success')
         return True
     except:
