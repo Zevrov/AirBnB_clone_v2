@@ -24,7 +24,7 @@ target = '/data/web_static/releases/' + path
         fabric.api.run('sudo mv ' + target + '/web_static/* ' + target + '/')
         fabric.api.run('sudo rm -rf ' + target + '/web_static')
         fabric.api.run('sudo rm -rf /data/web_static/current')
-        fabric.api.run('sudo ln -s ' + target + '/data/web_static/current')
+        fabric.api.run('sudo ln -s ' + target + ' /data/web_static/current')
         print('deploy success')
         return True
     except:
