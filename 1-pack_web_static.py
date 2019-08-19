@@ -14,4 +14,4 @@ def do_pack():
     time = datetime.now().strftime("%Y%m%d%H%M%S")
     file = "versions/web_static_{}.tgz".format(time)
     fabric.api.local('tar -cvzf ' + file + ' web_static')
-    return target
+    return file
