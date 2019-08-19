@@ -9,9 +9,12 @@ import fabric.api
 
 def do_pack():
     """compress + bundle local sweb files"""
-    if isdir("versions") is False:
-            local("mkdir versions")
-    time = datetime.now().strftime("%Y%m%d%H%M%S")
-    file = "versions/web_static_{}.tgz".format(time)
-    fabric.api.local('tar -cvzf ' + file + ' web_static')
-    return file
+    try:
+        if isdir("versions") is False:
+                local("mkdir versions")
+        time = datetime.now().strftime("%Y%m%d%H%M%S")
+        file = "versions/web_static_{}.tgz".format(time)
+        fabric.api.local('tar -cvzf ' + file + ' web_static')
+        return file
+    except:
+        return None
