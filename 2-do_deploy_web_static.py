@@ -13,9 +13,10 @@ def do_deploy(archive_path):
     if os.path.exists(archive_path) is False:
         return False
 
+path = archive_path.split('/')[1]
+target = '/data/web_static/releases/' + path
+
     try:
-        path = archive_path.split('/')[1]
-        target = '/data/web_static/releases/' + path
         fabric.api.put(archive_path, "/tmp/")
         fabric.api.run('sudo mkdir -p ' + target + '/')
         fabric.api.run('sudo tar -xzf /tmp/' + path + ' -C ' + target + '/')
