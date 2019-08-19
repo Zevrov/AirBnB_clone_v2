@@ -2,7 +2,7 @@
 """module pack up in tar format"""
 
 import os
-import os path
+import os.path
 import datetime
 import fabric.api
 
