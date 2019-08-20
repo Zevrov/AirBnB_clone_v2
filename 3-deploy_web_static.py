@@ -12,10 +12,10 @@ env.user = 'ubuntu'
 def do_pack():
     """compress + bundle local sweb files"""
     if not os.path.isdir('versions'):
-        fabric.api.local('mkdir -p versions')
+        local('mkdir -p versions')
     time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     packed = 'versions/web_static_' + time + '.tgz'
-    fabric.api.local('tar -cvzf {} web_static'.format(packed))
+    local('tar -cvzf {} web_static'.format(packed))
     return (packed)
 
 
@@ -44,8 +44,7 @@ def do_deploy(archive_path):
 
 def deploy():
     """make and ship static"""
-    try:
-        path = do_pack()
-    except Exception:
-        return(False)
+    path = do_pack()
+    if path is None:
+        return False
     return do_deploy(path)
