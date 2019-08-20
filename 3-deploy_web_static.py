@@ -6,19 +6,17 @@ import os
 import os.path
 import datetime
 env.hosts = ['34.73.58.99', '34.74.6.218']
+env.user = 'ubuntu'
 
 
 def do_pack():
     """compress + bundle local sweb files"""
-    try:
-        if os.path.isdir("versions") is False:
-                os.mkdir("versions")
-        time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        packed = 'versions/web_static_' + time + '.tgz'
-        fabric.api.local("tar -cvzf {} web_static".format(packed))
-        return packed
-    except:
-        return None
+    if not os.path.isdir('versions'):
+        fabric.api.local('mkdir -p versions')
+    time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    packed = 'versions/web_static_' + time + '.tgz'
+    fabric.api.local('tar -cvzf {} web_static'.format(packed))
+    return (packed)
 
 
 def do_deploy(archive_path):
@@ -48,6 +46,6 @@ def deploy():
     """make and ship static"""
     try:
         path = do_pack()
-    except:
-        return False
-    do_deploy(path)
+    except Exception:
+        return(False)
+    return do_deploy(path)
