@@ -42,3 +42,12 @@ def do_deploy(archive_path):
         return True
     except:
         return False
+
+
+def deploy():
+    """make and ship static"""
+    try:
+        path = do_pack()
+    except:
+        return False
+    do_deploy(path)
