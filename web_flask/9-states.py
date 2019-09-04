@@ -15,18 +15,11 @@ def teardown_appcontext(self):
     storage.close()
 
 
-@application.route('/states_list')
-def showStates():
-    """List all the stored states"""
-    states = storage.all('State').values()
-    return render_template('7-states_list.html', states=states)
-
-
-@application.route('/cities_by_states')
-def showStatesCities():
-    """List all the stored states and the cities within them"""
-    states = storage.all('State').values()
-    return render_template('8-cities_by_states.html', states=states)
+@app.route('/states')
+def states():
+    """injects states into html"""
+    states = storage.all('State')
+    return render_template('9-states.html', state=states)
 
 
 @application.route('/states/<id>')
