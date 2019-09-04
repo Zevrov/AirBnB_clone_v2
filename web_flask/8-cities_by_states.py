@@ -15,11 +15,19 @@ def teardown_appcontext(self):
     storage.close()
 
 
+<<<<<<< HEAD
 @application.route('/cities_by_states')
 def showStatesCities():
     """List all the stored states and the cities within them"""
     states = storage.all('State').values()
     return render_template('8-cities_by_states.html', states=states)
+=======
+@application.route('/states_list')
+def showStates():
+    """List all the stored states"""
+    states = storage.all('State').values()
+    return render_template('7-states_list.html', states=states)
+>>>>>>> ef6bb865c84bb53cace3b58fc77a974cc96af1b2
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0', port=5000)
