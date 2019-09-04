@@ -40,7 +40,7 @@ def number(n):
 @application.route('/number_template/<int:n>', strict_slashes=False)
 def number_template(n):
     """display 5-number_template.html if number is an int"""
-    return flask.render_template('5-number.html', title='HBNB', number=n)
+    return flask.render_template('5-number.html', title='HBNB', n=n)
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0', port=5000)
