@@ -26,10 +26,10 @@ def states():
 def state_id_list(id):
     """fill html with states and cities based on id"""
     states = storage.all('State')
-    if not ("State.{}".format(id)) in states:
-        state = "None"
-    else:
+    if ("State.{}".format(id)) in states:
         state = states.get("State." + id)
+    else:
+        state = "None"
     return render_template('9-states.html', state=state)
 
 if __name__ == '__main__':
