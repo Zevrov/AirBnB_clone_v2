@@ -2,6 +2,7 @@
 """starts a flask web app"""
 
 from flask import Flask
+from flask import render_template
 
 application = Flask(__name__)
 
@@ -40,7 +41,7 @@ def number(n):
 @application.route('/number_template/<int:n>', strict_slashes=False)
 def number_template(n):
     """display 5-number_template.html if number is an int"""
-    return render_template('5-number.html', title='HBNB', num=n)
+    return render_template('5-number.html', num=n)
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0', port=5000)
