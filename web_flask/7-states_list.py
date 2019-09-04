@@ -1,26 +1,25 @@
 #!/usr/bin/python3
-"""Module to start a Flask web application"""
+"""starts a flask web app"""
 
 from models import storage
 from flask import Flask
 from flask import render_template
 
-app = Flask(__name__)
-app.url_map.strict_slashes = False
+application = Flask(__name__)
+application.url_map.strict_slashes = False
 
 
-@app.teardown_appcontext
-def teardown(self):
-    """Closes current SQLAlchemy session after each request"""
+@application.teardown_appcontext
+def teardown_appcontext(self):
+    """close and reload the storage between requests"""
     storage.close()
 
 
-@app.route('/states_list')
-def state_list():
-    """Injects states and info into html"""
-    states = storage.all('State')
-    return render_template('7-states_list.html', state=states)
-
+@application.route('/states_list')
+def showStates():
+    """List all the stored states"""
+    states = storage.all('State').values()
+    return render_template('7-states_list.html', states=states)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    application.run(host='0.0.0.0', port=5000)
