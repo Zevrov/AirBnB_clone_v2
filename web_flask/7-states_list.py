@@ -10,7 +10,7 @@ application.url_map.strict_slashes = False
 
 
 @application.teardown_appcontext
-def closeStorageAfterRequest(error):
+def teardown_appcontext(self):
     """close and reload the storage between requests"""
     storage.close()
 
