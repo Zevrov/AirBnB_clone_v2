@@ -31,7 +31,7 @@ def python(text='is cool'):
     return 'Python ' + text.replace('_', ' ')
 
 
-@app.route('/number/<int:n>')
+@application.route('/number/<int:n>')
 def number(n):
     """Returns numbers if they are ints"""
     return "{} is a number".format(n)
