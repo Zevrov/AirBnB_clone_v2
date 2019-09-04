@@ -33,25 +33,19 @@ class DBStorage:
             models.base_model.Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """Return a collection of objects, optionally filtered by class
-
-        Args:
-            cls (Type[BaseModel]): class to filter by
-
-        Returns:
-            Dict[str, BaseModel]: mapping of data model instances
-
-        """
+        """Return a collection of objects, optionally filtered by class"""
 
         ret = {}
         if cls is None:
             for name, cls in models.classes.items():
                 if issubclass(cls, models.base_model.Base):
-                    for record in self.__session.query(cls):
+                    for record in DBStorage.__session.query(cls):
                         key = name + '.' + record.id
                         ret[key] = record
         else:
-            for record in self.__session.query(cls):
+            if not isinstance(cls, type):
+                cls = models.classes[cls]
+            for record in DBStorage.__session.query(cls):
                 key = cls.__name__ + '.' + record.id
                 ret[key] = record
         return ret
