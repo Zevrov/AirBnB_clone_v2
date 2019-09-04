@@ -26,7 +26,7 @@ def states():
 def state_id_list(id):
     """fill html with states and cities based on id"""
     states = storage.all('State')
-    if ("State.{}".format(id)) not in states:
+    if not ("State.{}".format(id)) in states:
         state = "None"
     else:
         state = states.get("State." + id)
