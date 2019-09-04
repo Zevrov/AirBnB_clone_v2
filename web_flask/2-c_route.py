@@ -18,7 +18,7 @@ def hbnb():
     return "HBNB"
 
 
-@app.route('/c/<text>', strict_slashes=False)
+@application.route('/c/<text>', strict_slashes=False)
 def c(text):
     """first function with a variable"""
     return 'C ' + text.replace('_', ' ')
