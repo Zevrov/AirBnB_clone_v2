@@ -15,6 +15,10 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
+    def close(self):
+        """Reloads the file"""
+        self.reload()
+
     def all(self, cls=None):
         """returns a dictionary
         Args:
