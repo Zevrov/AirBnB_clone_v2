@@ -15,7 +15,7 @@ def teardown_appcontext(self):
     storage.close()
 
 
-@app.route('/states')
+@application.route('/states')
 def states():
     """injects states into html"""
     states = storage.all('State')
