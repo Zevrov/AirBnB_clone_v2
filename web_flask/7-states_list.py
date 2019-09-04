@@ -14,7 +14,7 @@ def closeStorageAfterRequest(error):
     storage.close()
 
 
-@site.route('/states_list')
+@application.route('/states_list')
 def showStates():
     """List all the stored states"""
     states = storage.all('State').values()
