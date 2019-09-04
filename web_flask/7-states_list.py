@@ -11,7 +11,7 @@ application = Flask(__name__)
 @application.teardown_appcontext
 def closeStorageAfterRequest(error):
     """close and reload the storage between requests"""
-    models.storage.close()
+    storage.close()
 
 
 @site.route('/states_list')
